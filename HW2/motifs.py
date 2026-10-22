@@ -58,3 +58,21 @@ def profile_most_probable_kmer(
         if probability > best_probability:
             best_pattern, best_probability = pattern, probability
     return best_pattern
+
+
+def greedy_motif_search(dna: list[str], k: int) -> list[str]:
+    if not dna or k < 1 or any(len(text) < k for text in dna):
+        raise ValueError('Нужны непустой список DNA и 1 <= k <= длины всех строк.')
+    if any(base not in NUCLEOTIDES for text in dna for base in text):
+        raise ValueError('Допустимы только нуклеотиды A, C, G, T.')
+    best_motifs = [text[:k] for text in dna]
+    best_score = score(best_motifs)
+    for start in range(len(dna[0]) - k + 1):
+        motifs = [dna[0][start:start + k]]
+        for text in dna[1:]:
+            profile = profile_with_pseudocounts(motifs)
+            motifs.append(profile_most_probable_kmer(text, k, profile))
+        current_score = score(motifs)
+        if current_score < best_score:
+            best_motifs, best_score = motifs, current_score
+    return best_motifs
