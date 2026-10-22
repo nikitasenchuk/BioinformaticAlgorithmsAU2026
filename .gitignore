@@ -1,0 +1,5 @@
+.DS_Store
+__pycache__/
+*.pyc
+HW2/inputs/
+HW2/outputs/
