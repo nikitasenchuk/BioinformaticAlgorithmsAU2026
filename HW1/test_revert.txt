@@ -1,3 +1,1 @@
 This is a file for testing revert.
-This is a file for testing revert.
-This is a change.
